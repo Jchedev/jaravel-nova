@@ -70,17 +70,17 @@ class Badge extends Field implements FilterableField, Unfillable
      */
     public $icons = [
         'success' => 'check-circle',
-        'info' => 'information-circle',
-        'danger' => 'exclamation-circle',
+        'info'    => 'information-circle',
+        'danger'  => 'exclamation-circle',
         'warning' => 'exclamation-circle',
     ];
 
     /**
      * Create a new field.
      *
-     * @param  \Stringable|string  $name
-     * @param  string|callable|object|null  $attribute
-     * @param  (callable(mixed, mixed, ?string):(mixed))|null  $resolveCallback
+     * @param \Stringable|string $name
+     * @param string|callable|object|null $attribute
+     * @param (callable(mixed, mixed, ?string):(mixed))|null $resolveCallback
      */
     public function __construct($name, mixed $attribute = null, ?callable $resolveCallback = null)
     {
@@ -93,7 +93,7 @@ class Badge extends Field implements FilterableField, Unfillable
     /**
      * Add badge types and their corresponding CSS classes to the built-in ones.
      *
-     * @param  array<array-key, string>  $types
+     * @param array<array-key, string> $types
      * @return $this
      */
     public function addTypes(array $types)
@@ -106,7 +106,7 @@ class Badge extends Field implements FilterableField, Unfillable
     /**
      * Set the badge types and their corresponding CSS classes.
      *
-     * @param  array<array-key, string>  $types
+     * @param array<array-key, string> $types
      * @return $this
      */
     public function types(array $types)
@@ -119,7 +119,7 @@ class Badge extends Field implements FilterableField, Unfillable
     /**
      * Set the labels for each possible field value.
      *
-     * @param  array<array-key, string>  $labels
+     * @param array<array-key, string> $labels
      * @return $this
      */
     public function labels(array $labels)
@@ -132,7 +132,7 @@ class Badge extends Field implements FilterableField, Unfillable
     /**
      * Set the callback to be used to determine the field's displayable label.
      *
-     * @param  callable(mixed):string  $labelCallback
+     * @param callable(mixed):string $labelCallback
      * @return $this
      */
     public function label(callable $labelCallback)
@@ -145,7 +145,7 @@ class Badge extends Field implements FilterableField, Unfillable
     /**
      * Map the possible field values to the built-in badge types.
      *
-     * @param  array<array-key, string>  $map
+     * @param array<array-key, string> $map
      * @return $this
      */
     public function map(array $map)
@@ -170,7 +170,7 @@ class Badge extends Field implements FilterableField, Unfillable
     /**
      * Set the icons for each possible field value.
      *
-     * @param  array<array-key, string>  $icons
+     * @param array<array-key, string> $icons
      * @return $this
      */
     public function icons(array $icons)
@@ -186,12 +186,12 @@ class Badge extends Field implements FilterableField, Unfillable
      *
      * @throws \Exception
      */
-    public function resolveBadgeClasses(): array|string
+    public function resolveBadgeClasses(): array|string|null
     {
         $mappedValue = $this->map[$this->value] ?? $this->value;
 
-        if (! isset($this->types[$mappedValue])) {
-            throw new Exception("Error trying to find type [{$mappedValue}] inside of the field's type mapping.");
+        if (!isset($this->types[$mappedValue])) {
+            return null;
         }
 
         return $this->types[$mappedValue];
@@ -200,7 +200,7 @@ class Badge extends Field implements FilterableField, Unfillable
     /**
      * Resolve the display label for the Badge.
      */
-    public function resolveLabel(): Stringable|string
+    public function resolveLabel(): Stringable|string|null
     {
         return $this->resolveLabelFor($this->value);
     }
@@ -208,7 +208,7 @@ class Badge extends Field implements FilterableField, Unfillable
     /**
      * Resolve the display label for the Badge.
      */
-    protected function resolveLabelFor(string|int|null $value): Stringable|string
+    protected function resolveLabelFor(string|int|null $value): Stringable|string|null
     {
         if (isset($this->labelCallback)) {
             return \call_user_func($this->labelCallback, $value);
@@ -258,7 +258,7 @@ class Badge extends Field implements FilterableField, Unfillable
     {
         $mappedValue = $this->map[$this->value] ?? $this->value;
 
-        if (! isset($this->icons[$mappedValue])) {
+        if (!isset($this->icons[$mappedValue])) {
             throw new Exception("Error trying to find icon [{$mappedValue}] inside of the field's icon mapping.");
         }
 
@@ -274,9 +274,9 @@ class Badge extends Field implements FilterableField, Unfillable
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
-            'label' => $this->resolveLabel(),
+            'label'     => $this->resolveLabel(),
             'typeClass' => $this->resolveBadgeClasses(),
-            'icon' => $this->withIcons ? $this->resolveIcon() : null,
+            'icon'      => $this->withIcons ? $this->resolveIcon() : null,
         ]);
     }
 }
