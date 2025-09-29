@@ -26,6 +26,7 @@
           'px-2': index != 0 || shouldShowCheckboxes,
           'whitespace-nowrap': !field.wrapping,
         }"
+        :style="{width: index === 0 ? '80px' : ''}"
       >
         <SortableIcon
           v-if="sortable && field.sortable"

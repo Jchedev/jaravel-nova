@@ -1,6 +1,6 @@
 <template>
   <!-- Pagination -->
-  <div class="border-t border-gray-200 dark:border-gray-700">
+  <div class="border-t border-gray-200 dark:border-gray-700 py-1">
     <component
       :is="paginationComponent"
       :next="hasNextPage"

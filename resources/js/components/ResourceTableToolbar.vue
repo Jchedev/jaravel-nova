@@ -1,15 +1,6 @@
 <template>
   <div
-    class="flex flex-col md:flex-row md:items-center"
-    :class="{
-      'py-3 border-b border-gray-200 dark:border-gray-700':
-        shouldShowCheckboxes ||
-        shouldShowDeleteMenu ||
-        softDeletes ||
-        !viaResource ||
-        hasFilters ||
-        haveStandaloneActions,
-    }"
+    class="flex flex-col md:flex-row md:items-center ml-5"
   >
     <div class="flex items-center flex-1">
       <div class="md:ml-3">
@@ -136,7 +127,7 @@
 </template>
 
 <script>
-import { Button } from 'laravel-nova-ui'
+import {Button} from 'laravel-nova-ui'
 
 export default {
   components: {

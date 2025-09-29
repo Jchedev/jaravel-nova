@@ -36,17 +36,10 @@
       <div
         class="flex gap-2"
         :class="{
-          'mb-6': hasResourceSearch || hasResourceActionControls,
+          'mb-6': hasResourceActionControls,
         }"
       >
-        <IndexSearchInput
-          v-if="hasResourceSearch"
-          :searchable="hasResourceSearch"
-          v-model="search"
-        />
-
         <div
-          v-if="hasResourceActionControls"
           class="inline-flex items-center gap-2 ml-auto"
         >
           <!-- Action Dropdown -->
@@ -80,70 +73,80 @@
       </div>
 
       <Card>
-        <ResourceTableToolbar
-          :action-query-string="actionQueryString"
-          :all-matching-resource-count="allMatchingResourceCount"
-          :authorized-to-delete-any-resources="authorizedToDeleteAnyResources"
-          :authorized-to-delete-selected-resources="
-            authorizedToDeleteSelectedResources
-          "
-          :authorized-to-force-delete-any-resources="
-            authorizedToForceDeleteAnyResources
-          "
-          :authorized-to-force-delete-selected-resources="
-            authorizedToForceDeleteSelectedResources
-          "
-          :authorized-to-restore-any-resources="authorizedToRestoreAnyResources"
-          :authorized-to-restore-selected-resources="
-            authorizedToRestoreSelectedResources
-          "
-          :available-actions="availableActions"
-          :clear-selected-filters="clearSelectedFilters"
-          :close-delete-modal="closeDeleteModal"
-          :currently-polling="currentlyPolling"
-          :current-page-count="resources.length"
-          :delete-all-matching-resources="deleteAllMatchingResources"
-          :delete-selected-resources="deleteSelectedResources"
-          :filter-changed="filterChanged"
-          :force-delete-all-matching-resources="forceDeleteAllMatchingResources"
-          :force-delete-selected-resources="forceDeleteSelectedResources"
-          :get-resources="getResources"
-          :has-filters="hasFilters"
-          :have-standalone-actions="haveStandaloneActions"
-          :lenses="lenses"
-          :loading="resourceResponse && loading"
-          :per-page-options="perPageOptions"
-          :per-page="perPage"
-          :pivot-actions="pivotActions"
-          :pivot-name="pivotName"
-          :resources="resources"
-          :resource-information="resourceInformation"
-          :resource-name="resourceName"
-          :restore-all-matching-resources="restoreAllMatchingResources"
-          :restore-selected-resources="restoreSelectedResources"
-          :select-all-matching-checked="selectAllMatchingResources"
-          @deselect="deselectAllResources"
-          :selected-resources="selectedResources"
-          :selected-resources-for-action-selector="
-            selectedResourcesForActionSelector
-          "
-          :should-show-action-selector="shouldShowActionSelector"
-          :should-show-checkboxes="shouldShowSelectAllCheckboxes"
-          :should-show-delete-menu="shouldShowDeleteMenu"
-          :should-show-polling-toggle="shouldShowPollingToggle"
-          :soft-deletes="softDeletes"
-          @start-polling="startPolling"
-          @stop-polling="stopPolling"
-          :toggle-select-all-matching="toggleSelectAllMatching"
-          :toggle-select-all="toggleSelectAll"
-          :toggle-polling="togglePolling"
-          :trashed-changed="trashedChanged"
-          :trashed-parameter="trashedParameter"
-          :trashed="trashed"
-          :update-per-page-changed="updatePerPageChanged"
-          :via-many-to-many="viaManyToMany"
-          :via-resource="viaResource"
-        />
+          <div class="py-3 border-b border-gray-200 dark:border-gray-700" style="display:flex; align-items: center">
+              <div class="pl-3" style="flex:1">
+                  <IndexSearchInput
+                      v-if="hasResourceSearch"
+                      :searchable="hasResourceSearch"
+                      v-model="search"
+                  />
+              </div>
+
+            <ResourceTableToolbar
+              :action-query-string="actionQueryString"
+              :all-matching-resource-count="allMatchingResourceCount"
+              :authorized-to-delete-any-resources="authorizedToDeleteAnyResources"
+              :authorized-to-delete-selected-resources="
+                authorizedToDeleteSelectedResources
+              "
+              :authorized-to-force-delete-any-resources="
+                authorizedToForceDeleteAnyResources
+              "
+              :authorized-to-force-delete-selected-resources="
+                authorizedToForceDeleteSelectedResources
+              "
+              :authorized-to-restore-any-resources="authorizedToRestoreAnyResources"
+              :authorized-to-restore-selected-resources="
+                authorizedToRestoreSelectedResources
+              "
+              :available-actions="availableActions"
+              :clear-selected-filters="clearSelectedFilters"
+              :close-delete-modal="closeDeleteModal"
+              :currently-polling="currentlyPolling"
+              :current-page-count="resources.length"
+              :delete-all-matching-resources="deleteAllMatchingResources"
+              :delete-selected-resources="deleteSelectedResources"
+              :filter-changed="filterChanged"
+              :force-delete-all-matching-resources="forceDeleteAllMatchingResources"
+              :force-delete-selected-resources="forceDeleteSelectedResources"
+              :get-resources="getResources"
+              :has-filters="hasFilters"
+              :have-standalone-actions="haveStandaloneActions"
+              :lenses="lenses"
+              :loading="resourceResponse && loading"
+              :per-page-options="perPageOptions"
+              :per-page="perPage"
+              :pivot-actions="pivotActions"
+              :pivot-name="pivotName"
+              :resources="resources"
+              :resource-information="resourceInformation"
+              :resource-name="resourceName"
+              :restore-all-matching-resources="restoreAllMatchingResources"
+              :restore-selected-resources="restoreSelectedResources"
+              :select-all-matching-checked="selectAllMatchingResources"
+              @deselect="deselectAllResources"
+              :selected-resources="selectedResources"
+              :selected-resources-for-action-selector="
+                selectedResourcesForActionSelector
+              "
+              :should-show-action-selector="shouldShowActionSelector"
+              :should-show-checkboxes="shouldShowSelectAllCheckboxes"
+              :should-show-delete-menu="shouldShowDeleteMenu"
+              :should-show-polling-toggle="shouldShowPollingToggle"
+              :soft-deletes="softDeletes"
+              @start-polling="startPolling"
+              @stop-polling="stopPolling"
+              :toggle-select-all-matching="toggleSelectAllMatching"
+              :toggle-select-all="toggleSelectAll"
+              :toggle-polling="togglePolling"
+              :trashed-changed="trashedChanged"
+              :trashed-parameter="trashedParameter"
+              :trashed="trashed"
+              :update-per-page-changed="updatePerPageChanged"
+              :via-many-to-many="viaManyToMany"
+              :via-resource="viaResource"
+            />
+          </div>
 
         <LoadingView
           :loading="loading"
@@ -215,21 +218,21 @@
 </template>
 
 <script>
-import { CancelToken, isCancel } from 'axios'
+import {CancelToken, isCancel} from 'axios'
 import {
-  HasCards,
-  Paginatable,
-  PerPageable,
-  Deletable,
-  Collapsable,
-  LoadsResources,
-  IndexConcerns,
-  InteractsWithResourceInformation,
-  InteractsWithQueryString,
-  SupportsPolling,
+    Collapsable,
+    Deletable,
+    HasCards,
+    IndexConcerns,
+    InteractsWithQueryString,
+    InteractsWithResourceInformation,
+    LoadsResources,
+    Paginatable,
+    PerPageable,
+    SupportsPolling,
 } from '@/mixins'
-import { minimum } from '@/util'
-import { mapActions } from 'vuex'
+import {minimum} from '@/util'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'ResourceIndex',

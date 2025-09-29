@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="mb-14 lg:mb-11">
     <header
-      class="bg-white dark:bg-gray-800 flex items-center h-14 shadow-b dark:border-b dark:border-gray-700"
+      class="bg-white dark:bg-gray-800 flex items-center h-14 shadow-b dark:border-b dark:border-gray-700 border-b fixed top-0 inset-x-0 z-50"
     >
       <Button
         icon="bars-3"
@@ -21,7 +21,7 @@
           <AppLogo class="h-6" />
         </Link>
 
-        <LicenseWarning />
+        <div style="flex:1"></div>
       </div>
 
       <div class="flex flex-1 px-4 sm:px-8 lg:px-12">
@@ -125,11 +125,10 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
-import LicenseWarning from '@/components/LicenseWarning'
-import { Button } from 'laravel-nova-ui'
-import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
-import { computed, onBeforeUnmount, useTemplateRef, watch } from 'vue'
+import {useStore} from 'vuex'
+import {Button} from 'laravel-nova-ui'
+import {useFocusTrap} from '@vueuse/integrations/useFocusTrap'
+import {computed, onBeforeUnmount, useTemplateRef, watch} from 'vue'
 
 const store = useStore()
 

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="hasItems"
-    class="sidebar-menu space-y-6"
+    class="sidebar-menu space-y-4"
     dusk="sidebar-menu"
     role="navigation"
   >
@@ -15,8 +15,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useStore } from 'vuex'
+import {computed} from 'vue'
+import {useStore} from 'vuex'
 
 defineOptions({
   name: 'MainMenu',

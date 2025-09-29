@@ -10,7 +10,7 @@
       }"
       @click="handleClick"
     >
-      <span class="inline-block shrink-0 w-6 h-6" />
+      <span class="inline-block shrink-0 w-3 h-6" />
       <span class="flex-1 flex items-center w-full px-3 text-sm">
         {{ item.name }}
       </span>
@@ -28,7 +28,7 @@
 import identity from 'lodash/identity'
 import omitBy from 'lodash/omitBy'
 import pickBy from 'lodash/pickBy'
-import { mapGetters, mapMutations } from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 
 export default {
   props: {
