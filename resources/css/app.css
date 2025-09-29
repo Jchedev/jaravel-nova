@@ -60,4 +60,5 @@
 /*rtl:end:ignore*/
 @import 'nova';
 @import 'fonts';
+@import 'custom';
 @import 'tailwindcss/utilities';
