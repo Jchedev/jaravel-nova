@@ -1,6 +1,6 @@
 {
   "$schema": "https://getcomposer.org/schema.json",
-  "name": "laravel/nova",
+  "name": "jchedev/jaravel-nova",
   "description": "A wonderful administration interface for Laravel.",
   "keywords": [
     "laravel",
