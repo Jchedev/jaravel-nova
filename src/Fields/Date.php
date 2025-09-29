@@ -48,14 +48,14 @@ class Date extends Field implements FilterableField
     /**
      * Create a new field.
      *
-     * @param  \Stringable|string  $name
-     * @param  string|callable|object|null  $attribute
-     * @param  (callable(mixed, mixed, ?string):(mixed))|null  $resolveCallback
+     * @param \Stringable|string $name
+     * @param string|callable|object|null $attribute
+     * @param (callable(mixed, mixed, ?string):(mixed))|null $resolveCallback
      */
     public function __construct($name, mixed $attribute = null, ?callable $resolveCallback = null)
     {
         parent::__construct($name, $attribute, $resolveCallback ?? static function ($value) {
-            if (! \is_null($value)) {
+            if (!\is_null($value)) {
                 if ($value instanceof DateTimeInterface) {
                     return $value instanceof CarbonInterface
                         ? $value->toDateString()
@@ -151,9 +151,9 @@ class Date extends Field implements FilterableField
         return function (NovaRequest $request, $query, $value, $attribute) {
             [$min, $max] = $value;
 
-            if (! \is_null($min) && ! \is_null($max)) {
+            if (!\is_null($min) && !\is_null($max)) {
                 return $query->whereBetween($attribute, [$min, $max]);
-            } elseif (! \is_null($min)) {
+            } elseif (!\is_null($min)) {
                 return $query->where($attribute, '>=', $min);
             }
 
@@ -166,7 +166,7 @@ class Date extends Field implements FilterableField
      */
     public function serializeForFilter(): array
     {
-        return transform($this->jsonSerialize(), static fn ($field) => Arr::only($field, [
+        return transform($this->jsonSerialize(), static fn($field) => Arr::only($field, [
             'uniqueKey',
             'name',
             'attribute',
@@ -185,8 +185,8 @@ class Date extends Field implements FilterableField
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), array_filter([
-            'min' => $this->min,
-            'max' => $this->max,
+            'min'  => $this->min,
+            'max'  => $this->max,
             'step' => $this->step ?? 'any',
         ]));
     }

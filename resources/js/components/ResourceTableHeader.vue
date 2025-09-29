@@ -19,14 +19,14 @@
         :key="field.uniqueKey"
         class="uppercase text-gray-500 text-xxs tracking-wide py-2"
         :class="{
-          [`text-${field.textAlign}`]: true,
-          'border-r border-gray-200 dark:border-gray-600':
-            shouldShowColumnBorders,
+           [`text-${field.textAlign}`]: true,
+           [`${field.component}`]: true,
+          'border-r border-gray-200 dark:border-gray-600': shouldShowColumnBorders,
           'px-6': index == 0 && !shouldShowCheckboxes,
           'px-2': index != 0 || shouldShowCheckboxes,
           'whitespace-nowrap': !field.wrapping,
         }"
-        :style="{width: index === 0 ? '80px' : ''}"
+        :style="[field.thStyle, {width: field.width}]"
       >
         <SortableIcon
           v-if="sortable && field.sortable"

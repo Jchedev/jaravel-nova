@@ -74,6 +74,10 @@
 
       <Card>
           <div class="py-3 border-b border-gray-200 dark:border-gray-700" style="display:flex; align-items: center">
+            <div v-if="!loading" class="pl-4 font-bold mr-1">
+              {{ allMatchingResourceCount }} {{ allMatchingResourceCount != 1 ? 'elements' : 'element'}}
+            </div>
+
               <div class="pl-3" style="flex:1">
                   <IndexSearchInput
                       v-if="hasResourceSearch"
@@ -220,16 +224,16 @@
 <script>
 import {CancelToken, isCancel} from 'axios'
 import {
-    Collapsable,
-    Deletable,
-    HasCards,
-    IndexConcerns,
-    InteractsWithQueryString,
-    InteractsWithResourceInformation,
-    LoadsResources,
-    Paginatable,
-    PerPageable,
-    SupportsPolling,
+  Collapsable,
+  Deletable,
+  HasCards,
+  IndexConcerns,
+  InteractsWithQueryString,
+  InteractsWithResourceInformation,
+  LoadsResources,
+  Paginatable,
+  PerPageable,
+  SupportsPolling,
 } from '@/mixins'
 import {minimum} from '@/util'
 import {mapActions} from 'vuex'

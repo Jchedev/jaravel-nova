@@ -32,7 +32,7 @@
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <div v-if="notificationsShown" class="fixed flex inset-0 z-20">
+      <div v-if="notificationsShown" class="fixed flex inset-0 z-50">
         <div
           @click="toggleNotifications"
           class="absolute inset-0 bg-gray-600/75 dark:bg-gray-900/75"
@@ -124,8 +124,8 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-import { Button } from 'laravel-nova-ui'
+import {createNamespacedHelpers} from 'vuex'
+import {Button} from 'laravel-nova-ui'
 
 const { mapMutations, mapActions, mapGetters } = createNamespacedHelpers('nova')
 
