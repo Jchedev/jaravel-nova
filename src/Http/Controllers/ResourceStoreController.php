@@ -59,10 +59,11 @@ class ResourceStoreController extends Controller
             });
 
             return response()->json([
-                'id' => $model->getKey(),
+                'id'       => $model->getKey(),
                 'redirect' => URL::make($resourceClass::redirectAfterCreate($request, $request->newResourceWith($model))),
             ], 201);
-        } catch (Throwable $e) {
+        }
+        catch (Throwable $e) {
             optional($this->actionEvent)->delete();
             throw $e;
         }
@@ -71,7 +72,7 @@ class ResourceStoreController extends Controller
     /**
      * Save the resource.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      */
     protected function storeResource(CreateResourceRequest $request, $model): bool
     {
@@ -79,8 +80,8 @@ class ResourceStoreController extends Controller
 
         $resourceClass::beforeCreate($request, $model);
 
-        if (! $request->viaRelationship()) {
-            return $model->save();
+        if (!$request->viaRelationship()) {
+            return $resourceClass::save($request, $model);
         }
 
         $relation = tap($request->findParentResourceOrFail(), static function ($relatedResource) use ($request, $model) {
@@ -89,9 +90,9 @@ class ResourceStoreController extends Controller
         })->model()->{$request->viaRelationship}();
 
         if ($relation instanceof HasManyThrough) {
-            return $model->save();
+            return $resourceClass::save($model);
         }
 
-        return with($relation->save($model), fn ($model) => $model instanceof Model);
+        return with($relation->save($model), fn($model) => $model instanceof Model);
     }
 }

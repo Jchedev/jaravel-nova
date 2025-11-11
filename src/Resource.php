@@ -2,6 +2,7 @@
 
 namespace Laravel\Nova;
 
+use App\Models\Model;
 use ArrayAccess;
 use Illuminate\Contracts\Routing\UrlRoutable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +19,6 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Menu\MenuItem;
 use Laravel\Scout\Searchable;
-
 use function Orchestra\Sidekick\Eloquent\model_exists;
 
 /**
@@ -222,7 +222,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     /**
      * Create a new resource instance.
      *
-     * @param  TModel|null  $resource
+     * @param TModel|null $resource
      */
     public function __construct($resource = null)
     {
@@ -290,7 +290,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     {
         $model = $this->model();
 
-        if (! model_exists($model)) {
+        if (!model_exists($model)) {
             throw new InvalidArgumentException('Unable to replicate from non-existing resource');
         }
 
@@ -351,7 +351,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function searchable()
     {
-        return (static::$searchable && ! empty(static::searchableColumns())) || (static::$searchable && static::usesScout());
+        return (static::$searchable && !empty(static::searchableColumns())) || (static::$searchable && static::usesScout());
     }
 
     /**
@@ -382,8 +382,8 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     public static function searchableColumns()
     {
         return empty(static::$search)
-                    ? [static::newModel()->getKeyName()]
-                    : static::$search;
+            ? [static::newModel()->getKeyName()]
+            : static::$search;
     }
 
     /**
@@ -413,7 +413,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public function title()
     {
-        return (string) data_get($this, static::$title);
+        return (string)data_get($this, static::$title);
     }
 
     /**
@@ -475,7 +475,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     {
         return transform(
             static::$perPageOptions,
-            static fn ($perPageOptions) => Arr::wrap($perPageOptions),
+            static fn($perPageOptions) => Arr::wrap($perPageOptions),
             [static::newModel()->getPerPage()],
         );
     }
@@ -493,7 +493,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
 
         return transform(
             static::$perPageViaRelationshipOptions,
-            static fn ($perPageOptions) => Arr::wrap($perPageOptions),
+            static fn($perPageOptions) => Arr::wrap($perPageOptions),
             [5],
         );
     }
@@ -511,47 +511,47 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     /**
      * Prepare the resource for JSON serialization.
      *
-     * @param  \Illuminate\Support\Collection<int, \Laravel\Nova\Fields\Field>  $fields
+     * @param \Illuminate\Support\Collection<int, \Laravel\Nova\Fields\Field> $fields
      * @return array<string, mixed>
      */
     public function serializeForIndex(NovaRequest $request, $fields = null)
     {
         return array_merge($this->serializeWithId($fields ?: $this->indexFields($request)), [
-            'title' => $this->title(),
-            'actions' => $this->availableActionsOnTableRow($request),
-            'authorizedToView' => $this->authorizedToView($request),
-            'authorizedToCreate' => $this->authorizedToCreate($request),
-            'authorizedToReplicate' => $this->authorizedToReplicate($request),
-            'authorizedToUpdate' => $this->authorizedToUpdateForSerialization($request),
-            'authorizedToDelete' => $this->authorizedToDeleteForSerialization($request),
-            'authorizedToRestore' => static::softDeletes() && $this->authorizedToRestore($request),
+            'title'                   => $this->title(),
+            'actions'                 => $this->availableActionsOnTableRow($request),
+            'authorizedToView'        => $this->authorizedToView($request),
+            'authorizedToCreate'      => $this->authorizedToCreate($request),
+            'authorizedToReplicate'   => $this->authorizedToReplicate($request),
+            'authorizedToUpdate'      => $this->authorizedToUpdateForSerialization($request),
+            'authorizedToDelete'      => $this->authorizedToDeleteForSerialization($request),
+            'authorizedToRestore'     => static::softDeletes() && $this->authorizedToRestore($request),
             'authorizedToForceDelete' => static::softDeletes() && $this->authorizedToForceDelete($request),
             'authorizedToImpersonate' => $this->authorizedToImpersonate($request),
-            'previewHasFields' => $this->previewFieldsCount($request) > 0,
-            'softDeletes' => static::softDeletes(),
-            'softDeleted' => $this->isSoftDeleted(),
+            'previewHasFields'        => $this->previewFieldsCount($request) > 0,
+            'softDeletes'             => static::softDeletes(),
+            'softDeleted'             => $this->isSoftDeleted(),
         ]);
     }
 
     /**
      * Prepare the resource for JSON serialization.
      *
-     * @param  \Laravel\Nova\Resource  $resource
+     * @param \Laravel\Nova\Resource $resource
      * @return array<string, mixed>
      */
     public function serializeForDetail(NovaRequest $request, self $resource)
     {
         return array_merge($this->serializeWithId($this->detailFieldsWithinPanels($request, $resource)), [
-            'title' => $this->title(),
-            'authorizedToCreate' => $this->authorizedToCreate($request),
-            'authorizedToReplicate' => $this->authorizedToReplicate($request),
-            'authorizedToUpdate' => $this->authorizedToUpdate($request),
-            'authorizedToDelete' => $this->authorizedToDelete($request),
-            'authorizedToRestore' => static::softDeletes() && $this->authorizedToRestore($request),
+            'title'                   => $this->title(),
+            'authorizedToCreate'      => $this->authorizedToCreate($request),
+            'authorizedToReplicate'   => $this->authorizedToReplicate($request),
+            'authorizedToUpdate'      => $this->authorizedToUpdate($request),
+            'authorizedToDelete'      => $this->authorizedToDelete($request),
+            'authorizedToRestore'     => static::softDeletes() && $this->authorizedToRestore($request),
             'authorizedToForceDelete' => static::softDeletes() && $this->authorizedToForceDelete($request),
             'authorizedToImpersonate' => $this->authorizedToImpersonate($request),
-            'softDeletes' => static::softDeletes(),
-            'softDeleted' => $this->isSoftDeleted(),
+            'softDeletes'             => static::softDeletes(),
+            'softDeleted'             => $this->isSoftDeleted(),
         ]);
     }
 
@@ -564,7 +564,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     {
         /** @phpstan-ignore argument.type */
         return array_merge($this->serializeWithId($this->previewFields($request)), [
-            'title' => $this->title(),
+            'title'       => $this->title(),
             'softDeleted' => $this->isSoftDeleted(),
         ]);
     }
@@ -577,7 +577,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     public function serializeForPeeking(NovaRequest $request)
     {
         return array_merge($this->serializeWithId($this->peekableFields($request)), [
-            'title' => $this->title(),
+            'title'       => $this->title(),
             'softDeleted' => $this->isSoftDeleted(),
         ]);
     }
@@ -642,37 +642,47 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     /**
      * Prepare the resource for JSON serialization using the given fields.
      *
-     * @param  \Illuminate\Support\Collection<int, \Laravel\Nova\Fields\Field>  $fields
+     * @param \Illuminate\Support\Collection<int, \Laravel\Nova\Fields\Field> $fields
      * @return array
      */
     protected function serializeWithId(Collection $fields)
     {
         return [
-            'id' => $fields->whereInstanceOf(ID::class)->first() ?: ID::forModel($this->resource),
+            'id'     => $fields->whereInstanceOf(ID::class)->first() ?: ID::forModel($this->resource),
             'fields' => $fields->all(),
         ];
     }
 
     /**
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     * @param \App\Models\Model $model
+     * @return bool
+     */
+    public static function save(NovaRequest $request, Model $model)
+    {
+        return $model->save();
+    }
+
+    /**
      * Return the location to redirect the user after creation.
      *
-     * @param  \Laravel\Nova\Resource  $resource
+     * @param \Laravel\Nova\Resource $resource
      * @return \Laravel\Nova\URL|string
      */
     public static function redirectAfterCreate(NovaRequest $request, Resource $resource)
     {
-        return '/resources/'.static::uriKey().'/'.$resource->getKey();
+        return '/resources/' . static::uriKey() . '/' . $resource->getKey();
     }
 
     /**
      * Return the location to redirect the user after an update.
      *
-     * @param  \Laravel\Nova\Resource  $resource
+     * @param \Laravel\Nova\Resource $resource
      * @return \Laravel\Nova\URL|string
      */
     public static function redirectAfterUpdate(NovaRequest $request, Resource $resource)
     {
-        return '/resources/'.static::uriKey().'/'.$resource->getKey();
+        return '/resources/' . static::uriKey() . '/' . $resource->getKey();
     }
 
     /**
