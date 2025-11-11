@@ -81,7 +81,13 @@ class ResourceStoreController extends Controller
         $resourceClass::beforeCreate($request, $model);
 
         if (!$request->viaRelationship()) {
-            return $resourceClass::save($request, $model);
+            if (method_exists($resourceClass, 'save')) {
+                $response = $resourceClass::save($request, $model);
+            } else {
+                $response = $model->save();
+            }
+
+            return $response;
         }
 
         $relation = tap($request->findParentResourceOrFail(), static function ($relatedResource) use ($request, $model) {
@@ -90,7 +96,13 @@ class ResourceStoreController extends Controller
         })->model()->{$request->viaRelationship}();
 
         if ($relation instanceof HasManyThrough) {
-            return $resourceClass::save($model);
+            if (method_exists($resourceClass, 'save')) {
+                $response = $resourceClass::save($request, $model);
+            } else {
+                $response = $model->save();
+            }
+
+            return $response;
         }
 
         return with($relation->save($model), fn($model) => $model instanceof Model);

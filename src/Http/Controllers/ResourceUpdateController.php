@@ -51,7 +51,13 @@ class ResourceUpdateController extends Controller
 
                 $resource::beforeUpdate($request, $model);
 
-                if ($model->save() === false) {
+                if (method_exists($resource, 'save')) {
+                    $response = $resource::save($request, $model);
+                } else {
+                    $response = $model->save();
+                }
+
+                if ($response === false) {
                     throw new ResourceSaveCancelledException;
                 }
 
@@ -69,10 +75,11 @@ class ResourceUpdateController extends Controller
             });
 
             return response()->json([
-                'id' => $model->getKey(),
+                'id'       => $model->getKey(),
                 'redirect' => URL::make($resource::redirectAfterUpdate($request, $resource)),
             ]);
-        } catch (Throwable $e) {
+        }
+        catch (Throwable $e) {
             optional($this->actionEvent)->delete();
             throw $e;
         }
@@ -81,7 +88,7 @@ class ResourceUpdateController extends Controller
     /**
      * Determine if the model has been updated since it was retrieved.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      */
     protected function modelHasBeenUpdatedSinceRetrieval(UpdateResourceRequest $request, $model): bool
     {
@@ -94,12 +101,12 @@ class ResourceUpdateController extends Controller
 
         $column = $model->getUpdatedAtColumn();
 
-        if (! ($model->usesTimestamps() && $model->{$column})) {
+        if (!($model->usesTimestamps() && $model->{$column})) {
             return false;
         }
 
         return $request->input('_retrieved_at') && $model->{$column}->gt(
-            Carbon::createFromTimestamp($request->input('_retrieved_at'))
-        );
+                Carbon::createFromTimestamp($request->input('_retrieved_at'))
+            );
     }
 }
