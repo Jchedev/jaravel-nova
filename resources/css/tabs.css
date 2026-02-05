@@ -37,6 +37,10 @@ form .tab-group .tab.fields-tab {
   @apply hidden;
 }
 
+.tab-group .tab .index-heading {
+    @apply p-4 mb-0;
+}
+
 .tab-group h1 + .flex {
   @apply px-4 pt-4 pb-0;
 }

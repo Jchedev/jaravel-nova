@@ -3,6 +3,7 @@
 namespace Laravel\Nova\Fields;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Laravel\Nova\Contracts\Cover;
 
 class Image extends File implements Cover
@@ -33,11 +34,21 @@ class Image extends File implements Cover
 
         $this->acceptedTypes('image/*');
 
-        $this->thumbnail(function () {
-            return $this->value ? Storage::disk($this->getStorageDisk())->url($this->value) : null;
-        })->preview(function () {
-            return $this->value ? Storage::disk($this->getStorageDisk())->url($this->value) : null;
-        });
+        $this->acceptedTypes('image/*');
+
+        $valueResolver = function () {
+            if ($this->value) {
+                if (Str::startsWith($this->value, ['http://', 'https://'])) {
+                    return $this->value;
+                } else {
+                    return Storage::disk($this->getStorageDisk())->url($this->value);
+                }
+            }
+        };
+
+        $this->thumbnail($valueResolver);
+
+        $this->preview($valueResolver);
     }
 
     /**

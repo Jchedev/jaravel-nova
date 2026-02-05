@@ -1,49 +1,43 @@
 <template>
   <LoadingView
-    :loading="initialLoading"
-    :dusk="resourceName + '-index-component'"
-    :data-relationship="viaRelationship"
+      :loading="initialLoading"
+      :dusk="resourceName + '-index-component'"
+      :data-relationship="viaRelationship"
   >
     <template v-if="shouldOverrideMeta && resourceInformation">
-      <Head :title="__(`${resourceInformation.label}`)" />
+      <Head :title="__(`${resourceInformation.label}`)"/>
     </template>
 
     <Cards
-      v-if="shouldShowCards"
-      :cards="cards"
-      :resource-name="resourceName"
+        v-if="shouldShowCards"
+        :cards="cards"
+        :resource-name="resourceName"
     />
 
-    <Heading
-      :level="1"
-      class="mb-3 flex items-center"
-      :class="{ 'mt-6': shouldShowCards && cards.length > 0 }"
-      dusk="index-heading"
-    >
-      <span v-html="headingTitle" />
-      <button
-        v-if="!loading && viaRelationship"
-        @click="handleCollapsableChange"
-        class="rounded border border-transparent h-6 w-6 ml-1 inline-flex items-center justify-center focus:outline-none focus:ring ring-primary-200"
-        :aria-label="__('Toggle Collapsed')"
-        :aria-expanded="shouldBeCollapsed === false ? 'true' : 'false'"
-      >
-        <CollapseButton :collapsed="shouldBeCollapsed" />
-      </button>
-    </Heading>
+    <div class="index-heading flex flex items-center mb-4"
+         :class="{ 'mt-6': shouldShowCards && cards.length > 0 }">
+      <Heading
+          :level="1"
+          dusk="index-heading">
 
-    <template v-if="!shouldBeCollapsed">
-      <div
-        class="flex gap-2"
-        :class="{
-          'mb-6': hasResourceActionControls,
-        }"
-      >
-        <div
-          class="inline-flex items-center gap-2 ml-auto"
+        <span v-html="headingTitle"/>
+
+        <button
+            v-if="!loading && viaRelationship"
+            @click="handleCollapsableChange"
+            class="rounded border border-transparent h-6 w-6 ml-1 inline-flex items-center justify-center focus:outline-none focus:ring ring-primary-200"
+            :aria-label="__('Toggle Collapsed')"
+            :aria-expanded="shouldBeCollapsed === false ? 'true' : 'false'"
         >
-          <!-- Action Dropdown -->
-          <ActionDropdown
+          <CollapseButton :collapsed="shouldBeCollapsed"/>
+        </button>
+      </Heading>
+
+      <div
+          v-show="shouldBeCollapsed === false"
+          class="inline-flex items-center gap-2 ml-auto">
+        <!-- Action Dropdown -->
+        <ActionDropdown
             v-if="availableStandaloneActions.length > 0"
             @actionExecuted="handleActionExecuted"
             :resource-name="resourceName"
@@ -54,10 +48,10 @@
             :actions="availableStandaloneActions"
             :selected-resources="selectedResourcesForActionSelector"
             trigger-dusk-attribute="index-standalone-action-dropdown"
-          />
+        />
 
-          <!-- Create / Attach Button -->
-          <CreateResourceButton
+        <!-- Create / Attach Button -->
+        <CreateResourceButton
             :label="createButtonLabel"
             :singular-name="singularName"
             :resource-name="resourceName"
@@ -68,25 +62,26 @@
             :authorized-to-create="authorizedToCreate"
             :authorized-to-relate="authorizedToRelate"
             class="shrink-0"
-          />
-        </div>
+        />
       </div>
+    </div>
 
+    <template v-if="!shouldBeCollapsed">
       <Card>
-          <div class="py-3 border-b border-gray-200 dark:border-gray-700" style="display:flex; align-items: center">
-            <div v-if="!loading" class="pl-4 font-bold mr-1">
-              {{ allMatchingResourceCount }} {{ allMatchingResourceCount != 1 ? 'elements' : 'element'}}
-            </div>
+        <div class="py-3 border-b border-gray-200 dark:border-gray-700" style="display:flex; align-items: center">
+          <div v-if="!loading" class="pl-4 font-bold mr-1">
+            {{ allMatchingResourceCount }} {{ allMatchingResourceCount != 1 ? 'elements' : 'element' }}
+          </div>
 
-              <div class="pl-3" style="flex:1">
-                  <IndexSearchInput
-                      v-if="hasResourceSearch"
-                      :searchable="hasResourceSearch"
-                      v-model="search"
-                  />
-              </div>
+          <div class="pl-3" style="flex:1">
+            <IndexSearchInput
+                v-if="hasResourceSearch"
+                :searchable="hasResourceSearch"
+                v-model="search"
+            />
+          </div>
 
-            <ResourceTableToolbar
+          <ResourceTableToolbar
               :action-query-string="actionQueryString"
               :all-matching-resource-count="allMatchingResourceCount"
               :authorized-to-delete-any-resources="authorizedToDeleteAnyResources"
@@ -149,70 +144,70 @@
               :update-per-page-changed="updatePerPageChanged"
               :via-many-to-many="viaManyToMany"
               :via-resource="viaResource"
-            />
-          </div>
+          />
+        </div>
 
         <LoadingView
-          :loading="loading"
-          :variant="!resourceResponse ? 'default' : 'overlay'"
+            :loading="loading"
+            :variant="!resourceResponse ? 'default' : 'overlay'"
         >
           <IndexErrorDialog
-            v-if="resourceResponseError != null"
-            :resource="resourceInformation"
-            @click="getResources"
+              v-if="resourceResponseError != null"
+              :resource="resourceInformation"
+              @click="getResources"
           />
 
           <template v-else>
             <IndexEmptyDialog
-              v-if="!loading && !resources.length"
-              :create-button-label="createButtonLabel"
-              :singular-name="singularName"
-              :resource-name="resourceName"
-              :via-resource="viaResource"
-              :via-resource-id="viaResourceId"
-              :via-relationship="viaRelationship"
-              :relationship-type="relationshipType"
-              :authorized-to-create="authorizedToCreate"
-              :authorized-to-relate="authorizedToRelate"
+                v-if="!loading && !resources.length"
+                :create-button-label="createButtonLabel"
+                :singular-name="singularName"
+                :resource-name="resourceName"
+                :via-resource="viaResource"
+                :via-resource-id="viaResourceId"
+                :via-relationship="viaRelationship"
+                :relationship-type="relationshipType"
+                :authorized-to-create="authorizedToCreate"
+                :authorized-to-relate="authorizedToRelate"
             />
 
             <ResourceTable
-              :authorized-to-relate="authorizedToRelate"
-              :resource-name="resourceName"
-              :resources="resources"
-              :singular-name="singularName"
-              :selected-resources="selectedResources"
-              :selected-resource-ids="selectedResourceIds"
-              :actions-are-available="allActions.length > 0"
-              :should-show-checkboxes="shouldShowCheckboxes"
-              :should-show-select-all-checkboxes="shouldShowSelectAllCheckboxes"
-              :via-resource="viaResource"
-              :via-resource-id="viaResourceId"
-              :via-relationship="viaRelationship"
-              :relationship-type="relationshipType"
-              :update-selection-status="updateSelectionStatus"
-              :sortable="sortable"
-              @order="orderByField"
-              @reset-order-by="resetOrderBy"
-              @delete="deleteResources"
-              @restore="restoreResources"
-              @actionExecuted="handleActionExecuted"
-              ref="resourceTable"
+                :authorized-to-relate="authorizedToRelate"
+                :resource-name="resourceName"
+                :resources="resources"
+                :singular-name="singularName"
+                :selected-resources="selectedResources"
+                :selected-resource-ids="selectedResourceIds"
+                :actions-are-available="allActions.length > 0"
+                :should-show-checkboxes="shouldShowCheckboxes"
+                :should-show-select-all-checkboxes="shouldShowSelectAllCheckboxes"
+                :via-resource="viaResource"
+                :via-resource-id="viaResourceId"
+                :via-relationship="viaRelationship"
+                :relationship-type="relationshipType"
+                :update-selection-status="updateSelectionStatus"
+                :sortable="sortable"
+                @order="orderByField"
+                @reset-order-by="resetOrderBy"
+                @delete="deleteResources"
+                @restore="restoreResources"
+                @actionExecuted="handleActionExecuted"
+                ref="resourceTable"
             />
 
             <ResourcePagination
-              v-if="shouldShowPagination"
-              :pagination-component="paginationComponent"
-              :has-next-page="hasNextPage"
-              :has-previous-page="hasPreviousPage"
-              :load-more="loadMore"
-              :select-page="selectPage"
-              :total-pages="totalPages"
-              :current-page="currentPage"
-              :per-page="perPage"
-              :resource-count-label="resourceCountLabel"
-              :current-resource-count="currentResourceCount"
-              :all-matching-resource-count="allMatchingResourceCount"
+                v-if="shouldShowPagination"
+                :pagination-component="paginationComponent"
+                :has-next-page="hasNextPage"
+                :has-previous-page="hasPreviousPage"
+                :load-more="loadMore"
+                :select-page="selectPage"
+                :total-pages="totalPages"
+                :current-page="currentPage"
+                :per-page="perPage"
+                :resource-count-label="resourceCountLabel"
+                :current-resource-count="currentResourceCount"
+                :all-matching-resource-count="allMatchingResourceCount"
             />
           </template>
         </LoadingView>
@@ -256,19 +251,19 @@ export default {
 
   props: {
     shouldOverrideMeta: {
-      type: Boolean,
+      type:    Boolean,
       default: false,
     },
 
     shouldEnableShortcut: {
-      type: Boolean,
+      type:    Boolean,
       default: false,
     },
   },
 
   data: () => ({
-    lenses: [],
-    sortable: true,
+    lenses:          [],
+    sortable:        true,
     actionCanceller: null,
   }),
 
@@ -319,10 +314,10 @@ export default {
     handleKeydown(e) {
       // `c`
       if (
-        this.authorizedToCreate &&
-        e.target.tagName !== 'INPUT' &&
-        e.target.tagName !== 'TEXTAREA' &&
-        e.target.contentEditable !== 'true'
+          this.authorizedToCreate &&
+          e.target.tagName !== 'INPUT' &&
+          e.target.tagName !== 'TEXTAREA' &&
+          e.target.contentEditable !== 'true'
       ) {
         Nova.visit(`/resources/${this.resourceName}/new`)
       }
@@ -337,42 +332,42 @@ export default {
         return
       }
 
-      this.loading = true
+      this.loading               = true
       this.resourceResponseError = null
 
       this.$nextTick(() => {
         this.clearResourceSelections()
 
         return minimum(
-          Nova.request().get('/nova-api/' + this.resourceName, {
-            params: this.resourceRequestQueryString,
-            cancelToken: new CancelToken(canceller => {
-              this.canceller = canceller
+            Nova.request().get('/nova-api/' + this.resourceName, {
+              params:      this.resourceRequestQueryString,
+              cancelToken: new CancelToken(canceller => {
+                this.canceller = canceller
+              }),
             }),
-          }),
-          300
+            300
         )
-          .then(({ data }) => {
-            this.resources = []
+            .then(({data}) => {
+              this.resources = []
 
-            this.resourceResponse = data
-            this.resources = data.resources
-            this.softDeletes = data.softDeletes
-            this.perPage = data.perPage
-            this.sortable = data.sortable
+              this.resourceResponse = data
+              this.resources        = data.resources
+              this.softDeletes      = data.softDeletes
+              this.perPage          = data.perPage
+              this.sortable         = data.sortable
 
-            this.handleResourcesLoaded()
-          })
-          .catch(e => {
-            if (isCancel(e)) {
-              return
-            }
+              this.handleResourcesLoaded()
+            })
+            .catch(e => {
+              if (isCancel(e)) {
+                return
+              }
 
-            this.loading = false
-            this.resourceResponseError = e
+              this.loading               = false
+              this.resourceResponseError = e
 
-            throw e
-          })
+              throw e
+            })
       })
     },
 
@@ -381,10 +376,10 @@ export default {
      */
     getAuthorizationToRelate() {
       if (
-        this.shouldBeCollapsed ||
-        (!this.authorizedToCreate &&
-          this.relationshipType !== 'belongsToMany' &&
-          this.relationshipType !== 'morphToMany')
+          this.shouldBeCollapsed ||
+          (!this.authorizedToCreate &&
+              this.relationshipType !== 'belongsToMany' &&
+              this.relationshipType !== 'morphToMany')
       ) {
         return
       }
@@ -394,22 +389,22 @@ export default {
       }
 
       return Nova.request()
-        .get(
-          '/nova-api/' +
-            this.resourceName +
-            '/relate-authorization' +
-            '?viaResource=' +
-            this.viaResource +
-            '&viaResourceId=' +
-            this.viaResourceId +
-            '&viaRelationship=' +
-            this.viaRelationship +
-            '&relationshipType=' +
-            this.relationshipType
-        )
-        .then(response => {
-          this.authorizedToRelate = response.data.authorized
-        })
+          .get(
+              '/nova-api/' +
+              this.resourceName +
+              '/relate-authorization' +
+              '?viaResource=' +
+              this.viaResource +
+              '&viaResourceId=' +
+              this.viaResourceId +
+              '&viaRelationship=' +
+              this.viaRelationship +
+              '&relationshipType=' +
+              this.relationshipType
+          )
+          .then(response => {
+            this.authorizedToRelate = response.data.authorized
+          })
     },
 
     /**
@@ -423,10 +418,10 @@ export default {
       }
 
       return Nova.request()
-        .get('/nova-api/' + this.resourceName + '/lenses')
-        .then(response => {
-          this.lenses = response.data
-        })
+          .get('/nova-api/' + this.resourceName + '/lenses')
+          .then(response => {
+            this.lenses = response.data
+          })
     },
 
     /**
@@ -435,7 +430,7 @@ export default {
     getActions() {
       if (this.actionCanceller !== null) this.actionCanceller()
 
-      this.actions = []
+      this.actions      = []
       this.pivotActions = null
 
       if (this.shouldBeCollapsed) {
@@ -443,37 +438,37 @@ export default {
       }
 
       return Nova.request()
-        .get(`/nova-api/${this.resourceName}/actions`, {
-          params: {
-            viaResource: this.viaResource,
-            viaResourceId: this.viaResourceId,
-            viaRelationship: this.viaRelationship,
-            relationshipType: this.relationshipType,
-            display: 'index',
-            resources: this.selectAllMatchingChecked
-              ? 'all'
-              : this.selectedResourceIds,
-            pivots: !this.selectAllMatchingChecked
-              ? this.selectedPivotIds
-              : null,
-          },
-          cancelToken: new CancelToken(canceller => {
-            this.actionCanceller = canceller
-          }),
-        })
-        .then(response => {
-          this.actions = response.data.actions
-          this.pivotActions = response.data.pivotActions
-          this.resourceHasSoleActions = response.data.counts.sole > 0
-          this.resourceHasActions = response.data.counts.resource > 0
-        })
-        .catch(e => {
-          if (isCancel(e)) {
-            return
-          }
+          .get(`/nova-api/${this.resourceName}/actions`, {
+            params:      {
+              viaResource:      this.viaResource,
+              viaResourceId:    this.viaResourceId,
+              viaRelationship:  this.viaRelationship,
+              relationshipType: this.relationshipType,
+              display:          'index',
+              resources:        this.selectAllMatchingChecked
+                                    ? 'all'
+                                    : this.selectedResourceIds,
+              pivots:           !this.selectAllMatchingChecked
+                                    ? this.selectedPivotIds
+                                    : null,
+            },
+            cancelToken: new CancelToken(canceller => {
+              this.actionCanceller = canceller
+            }),
+          })
+          .then(response => {
+            this.actions                = response.data.actions
+            this.pivotActions           = response.data.pivotActions
+            this.resourceHasSoleActions = response.data.counts.sole > 0
+            this.resourceHasActions     = response.data.counts.resource > 0
+          })
+          .catch(e => {
+            if (isCancel(e)) {
+              return
+            }
 
-          throw e
-        })
+            throw e
+          })
     },
 
     /**
@@ -481,12 +476,12 @@ export default {
      */
     getAllMatchingResourceCount() {
       Nova.request()
-        .get('/nova-api/' + this.resourceName + '/count', {
-          params: this.resourceRequestQueryString,
-        })
-        .then(response => {
-          this.allMatchingResourceCount = response.data.count
-        })
+          .get('/nova-api/' + this.resourceName + '/count', {
+            params: this.resourceRequestQueryString,
+          })
+          .then(response => {
+            this.allMatchingResourceCount = response.data.count
+          })
     },
 
     /**
@@ -500,16 +495,16 @@ export default {
       this.currentPageLoadMore = this.currentPageLoadMore + 1
 
       return minimum(
-        Nova.request().get('/nova-api/' + this.resourceName, {
-          params: {
-            ...this.resourceRequestQueryString,
-            page: this.currentPageLoadMore, // We do this to override whatever page number is in the URL
-          },
-        }),
-        300
-      ).then(({ data }) => {
+          Nova.request().get('/nova-api/' + this.resourceName, {
+            params: {
+              ...this.resourceRequestQueryString,
+              page: this.currentPageLoadMore, // We do this to override whatever page number is in the URL
+            },
+          }),
+          300
+      ).then(({data}) => {
         this.resourceResponse = data
-        this.resources = [...this.resources, ...data.resources]
+        this.resources        = [...this.resources, ...data.resources]
 
         if (data.total !== null) {
           this.allMatchingResourceCount = data.total
@@ -519,7 +514,7 @@ export default {
 
         Nova.$emit('resources-loaded', {
           resourceName: this.resourceName,
-          mode: this.isRelation ? 'related' : 'index',
+          mode:         this.isRelation ? 'related' : 'index',
         })
       })
     },
@@ -551,11 +546,11 @@ export default {
   computed: {
     actionQueryString() {
       return {
-        currentSearch: this.currentSearch,
-        encodedFilters: this.encodedFilters,
-        currentTrashed: this.currentTrashed,
-        viaResource: this.viaResource,
-        viaResourceId: this.viaResourceId,
+        currentSearch:   this.currentSearch,
+        encodedFilters:  this.encodedFilters,
+        currentTrashed:  this.currentTrashed,
+        viaResource:     this.viaResource,
+        viaResourceId:   this.viaResourceId,
         viaRelationship: this.viaRelationship,
       }
     },
@@ -583,18 +578,18 @@ export default {
      */
     resourceRequestQueryString() {
       return {
-        search: this.currentSearch,
-        filters: this.encodedFilters,
-        orderBy: this.currentOrderBy,
-        orderByDirection: this.currentOrderByDirection,
-        perPage: this.currentPerPage,
-        trashed: this.currentTrashed,
-        page: this.currentPage,
-        viaResource: this.viaResource,
-        viaResourceId: this.viaResourceId,
-        viaRelationship: this.viaRelationship,
+        search:                  this.currentSearch,
+        filters:                 this.encodedFilters,
+        orderBy:                 this.currentOrderBy,
+        orderByDirection:        this.currentOrderByDirection,
+        perPage:                 this.currentPerPage,
+        trashed:                 this.currentTrashed,
+        page:                    this.currentPage,
+        viaResource:             this.viaResource,
+        viaResourceId:           this.viaResourceId,
+        viaRelationship:         this.viaRelationship,
         viaResourceRelationship: this.viaResourceRelationship,
-        relationshipType: this.relationshipType,
+        relationshipType:        this.relationshipType,
       }
     },
 
@@ -603,7 +598,7 @@ export default {
      */
     canShowDeleteMenu() {
       return Boolean(
-        this.authorizedToDeleteSelectedResources ||
+          this.authorizedToDeleteSelectedResources ||
           this.authorizedToForceDeleteSelectedResources ||
           this.authorizedToRestoreSelectedResources ||
           this.selectAllMatchingChecked
@@ -631,13 +626,13 @@ export default {
 
     hasResourceSearch() {
       return Boolean(
-        this.resourceInformation && this.resourceInformation.searchable
+          this.resourceInformation && this.resourceInformation.searchable
       )
     },
 
     hasResourceActionControls() {
       return Boolean(
-        this.availableStandaloneActions.length > 0 ||
+          this.availableStandaloneActions.length > 0 ||
           (this.relationshipType === '' && this.authorizedToCreate) ||
           (this.relationshipType !== '' && this.authorizedToRelate)
       )
