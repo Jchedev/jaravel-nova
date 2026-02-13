@@ -628,6 +628,15 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     }
 
     /**
+     * @param $value
+     * @return null
+     */
+    public function width($value)
+    {
+        return $this->style('width', $value);
+    }
+
+    /**
      * @param $key
      * @param $value
      * @return null

@@ -1,20 +1,20 @@
 <template>
   <thead class="bg-gray-50 dark:bg-gray-800">
-    <tr>
-      <!-- Select Checkbox -->
-      <th
+  <tr>
+    <!-- Select Checkbox -->
+    <th
         v-if="showShowCheckboxesRow"
         class="w-[1%] white-space-nowrap uppercase bg-gray-50 dark:bg-gray-800 text-xxs text-gray-500 tracking-wide pl-5 pr-2 py-2"
         :class="{
           'border-r border-gray-200 dark:border-gray-600':
             shouldShowColumnBorders,
         }"
-      >
-        <span class="sr-only">{{ __('Selected Resources') }}</span>
-      </th>
+    >
+      <span class="sr-only">{{ __('Selected Resources') }}</span>
+    </th>
 
-      <!-- Field Names -->
-      <th
+    <!-- Field Names -->
+    <th
         v-for="(field, index) in fields"
         :key="field.uniqueKey"
         class="uppercase text-gray-500 text-xxs tracking-wide py-2"
@@ -26,26 +26,26 @@
           'px-2': index != 0 || shouldShowCheckboxes,
           'whitespace-nowrap': !field.wrapping,
         }"
-        :style="[field.thStyle, {width: field.width}]"
-      >
-        <SortableIcon
+        :style="field.thStyle"
+    >
+      <SortableIcon
           v-if="sortable && field.sortable"
           @sort="requestOrderByChange(field)"
           @reset="resetOrderBy(field)"
           :resource-name="resourceName"
           :uri-key="field.sortableUriKey"
-        >
-          {{ field.indexName }}
-        </SortableIcon>
+      >
+        {{ field.indexName }}
+      </SortableIcon>
 
-        <span v-else>{{ field.indexName }}</span>
-      </th>
+      <span v-else>{{ field.indexName }}</span>
+    </th>
 
-      <!-- View, Edit, and Delete -->
-      <th class="uppercase text-xxs tracking-wide px-2 py-2">
-        <span class="sr-only">{{ __('Controls') }}</span>
-      </th>
-    </tr>
+    <!-- View, Edit, and Delete -->
+    <th class="uppercase text-xxs tracking-wide px-2 py-2">
+      <span class="sr-only">{{ __('Controls') }}</span>
+    </th>
+  </tr>
   </thead>
 </template>
 
@@ -56,14 +56,14 @@ export default {
   emits: ['order', 'reset-order-by'],
 
   props: {
-    resourceName: String,
-    shouldShowColumnBorders: Boolean,
-    shouldShowCheckboxes: Boolean,
+    resourceName:                  String,
+    shouldShowColumnBorders:       Boolean,
+    shouldShowCheckboxes:          Boolean,
     shouldShowSelectAllCheckboxes: Boolean,
-    fields: {
+    fields:                        {
       type: [Object, Array],
     },
-    sortable: Boolean,
+    sortable:                      Boolean,
   },
 
   methods: {

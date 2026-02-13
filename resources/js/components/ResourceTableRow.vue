@@ -39,6 +39,7 @@
         'whitespace-nowrap': !field.wrapping,
         'cursor-pointer': clickableRow,
       }"
+      :style="field.tdStyle"
     >
       <component
         :is="'index-' + field.component"
@@ -192,9 +193,9 @@
 </template>
 
 <script>
-import { router } from '@inertiajs/vue3'
-import { mapGetters } from 'vuex'
-import { Button, Checkbox, Icon } from 'laravel-nova-ui'
+import {router} from '@inertiajs/vue3'
+import {mapGetters} from 'vuex'
+import {Button, Checkbox, Icon} from 'laravel-nova-ui'
 
 export default {
   components: {
